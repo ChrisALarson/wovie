@@ -1,0 +1,39 @@
+{
+  "name": "wovie",
+  "version": "1.0.0",
+  "description": "A simple workout log viewer",
+  "main": "index.js",
+  "scripts": {
+    "start": "node server/server.js",
+    "start:dev": "nodemon server/server.js",
+    "build": "webpack",
+    "build:dev": "webpack -d --watch",
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/chrisalarson/wovie.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/chrisalarson/wovie/issues"
+  },
+  "homepage": "https://github.com/chrisalarson/wovie#readme",
+  "dependencies": {
+    "express": "^4.16.4",
+    "react": "^16.5.2",
+    "react-dom": "^16.5.2",
+    "styled-components": "^3.4.10"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.1.2",
+    "@babel/preset-env": "^7.1.0",
+    "@babel/preset-react": "^7.0.0",
+    "babel-loader": "^8.0.4",
+    "babel-plugin-styled-components": "^1.8.0",
+    "nodemon": "^1.18.4",
+    "webpack": "^4.20.2",
+    "webpack-cli": "^3.1.2"
+  }
+}
