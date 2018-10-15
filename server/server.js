@@ -8,6 +8,16 @@ app.use(express.json());
 app.use(fileUpload());
 app.use(express.static('public'));
 
+
+// get user
+app.get('/users/:userId', (req, res) => {
+  const { userId } = req.params;
+  db.getUser(userId, (err, data) => {
+    if (err) return console.log(err);
+    res.status(200).send(data);
+  });
+});
+
 // get user workout
 app.get('/users/:userId/workouts/:workoutId', (req, res) => {
   const { userId, workoutId } = req.params;
@@ -30,6 +40,8 @@ app.get('/users/:userId/workouts', (req, res) => {
 app.post('/users/:userId/workouts', (req, res) => {
   const { userId } = req.params;
   const fileData = req.files.workoutFile.data;
+  const workoutName = req.body.workoutName;
+  console.log(workoutName);
   const easyFit = new EasyFit({
     force: true,
     speedUnit: 'mph',
@@ -43,7 +55,7 @@ app.post('/users/:userId/workouts', (req, res) => {
       res.status(500).send('Unable to parse workout. Check file type and try again.');
       console.log(error);
     } else {
-      db.addWorkout(userId, workout, (err, res) => {
+      db.addUserWorkout(userId, workout, workoutName, (err, res) => {
         console.log(res);
       });
       let sessions = workout.activity.sessions;

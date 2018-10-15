@@ -41,17 +41,31 @@ const activitySchema = new Schema({
 });
 
 const workoutSchema = new Schema({
-  user_id: Number,
+  user_id: {
+    type: Number,
+    ref: 'User',
+  },
+  timestamp: Date,
+  label: String,
   activity: activitySchema,
 });
 
 workoutSchema.index({ user_id: 1 });
+const Workout = mongoose.model('Workout', workoutSchema);
 
 const userSchema = new Schema({
   user_id: Number,
+  numWorkouts: Number,
+  workouts: [
+    {
+      '_id': { type: mongoose.Schema.Types.ObjectId, ref: 'Workout' },
+      label: String,
+      timestamp: Date,
+    }
+  ],
 });
 
-const Workout = mongoose.model('Workout', workoutSchema);
+userSchema.index({ user_id: 1 }, { unique: true });
 const User = mongoose.model('User', userSchema);
 
 module.exports = { User, Workout };
