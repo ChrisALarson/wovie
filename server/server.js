@@ -1,17 +1,16 @@
-const express = require('express');
-const EasyFit = require('easy-fit').default;
 const fs = require('fs');
+const express = require('express');
+const fileUplaod = require('express-fileupload');
+const EasyFit = require('easy-fit').default;
 
 const app = express();
+app.use(express.json());
+app.use(fileUplaod());
 app.use(express.static('public'));
 
-
-let basic_file = './sample-data/raw/garmin-basic.fit';
-let multi_file = './sample-data/raw/garmin-multi-sport.fit';
-let multi_hr_file = './sample-data/raw/garmin-multi-sport-hr.fit';
-
-fs.readFile(multi_file, function (err, content) {
-  var easyFit = new EasyFit({
+app.post('/workout', (req, res) => {
+  const fileData = req.files.workoutFile.data;
+  const easyFit = new EasyFit({
     force: true,
     speedUnit: 'mph',
     lengthUnit: 'mi',
@@ -19,12 +18,12 @@ fs.readFile(multi_file, function (err, content) {
     elapsedRecordField: true,
     mode: 'cascade',
   });
-  
-  easyFit.parse(content, function (error, data) {
+  easyFit.parse(fileData, function (error, workout) {
     if (error) {
+      res.status(500).send('Unable to parse workout. Check file type and try again.');
       console.log(error);
     } else {
-      let sessions = data.activity.sessions;
+      let sessions = workout.activity.sessions;
       sessions.forEach(session => {
         console.log(session.sport);
         let laps = session.laps;
@@ -34,14 +33,10 @@ fs.readFile(multi_file, function (err, content) {
           console.log('Number of lap records: ', records.length);
         })
       });
-      // fs.writeFileSync('./helloworld.json', JSON.stringify(data, null, 2));
-      // fs.writeFile('./basic.json', JSON.stringify(data, null, 2), (err, res) => {
-      //   if (err) console.log(err);
-      //   console.log(res);
-      // });
-      // console.log(JSON.stringify(data, null, 2));
+      res.status(201).send('Workout posted!');
     }
   });
 });
+
 
 app.listen(3002, () => console.log('App listening on port 3000'));
