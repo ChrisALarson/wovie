@@ -3,6 +3,8 @@ const express = require('express');
 const fileUplaod = require('express-fileupload');
 const EasyFit = require('easy-fit').default;
 
+const db = require('./db/db');
+
 const app = express();
 app.use(express.json());
 app.use(fileUplaod());
@@ -23,6 +25,9 @@ app.post('/workout', (req, res) => {
       res.status(500).send('Unable to parse workout. Check file type and try again.');
       console.log(error);
     } else {
+      db.addWorkout(1, workout, (err, res) => {
+        console.log(res);
+      });
       let sessions = workout.activity.sessions;
       sessions.forEach(session => {
         console.log(session.sport);
@@ -39,4 +44,4 @@ app.post('/workout', (req, res) => {
 });
 
 
-app.listen(3002, () => console.log('App listening on port 3000'));
+app.listen(3002, () => console.log('App listening on port 3002'));
