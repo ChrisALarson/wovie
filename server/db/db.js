@@ -3,12 +3,26 @@ const { Workout } = require('./models');
 
 mongoose.connect('mongodb://localhost:27017/wovie');
 
-const addWorkout = (userId, workout, callback) => {
-  const woDoc = new Workout({ user_id: userId, activity: workout.activity });
-  woDoc.save((err, res) => {
+const getUserWorkout = (userId, workoutId, callback) => {
+  Workout.findById(workoutId, (err, res) => {
     if (err) return console.log(err);
     callback(null, res);
   });
 };
 
-module.exports = { addWorkout };
+const getUserWorkouts = (userId, callback) => {
+  Workout.find({ user_id: userId}, (err, res) => {
+    if (err) return console.log(err);
+    callback(null, res);
+  });
+};
+
+const addUserWorkout = (userId, workout, callback) => {
+  const doc = new Workout({ user_id: userId, activity: workout.activity });
+  doc.save((err, res) => {
+    if (err) return console.log(err);
+    callback(null, res);
+  });
+};
+
+module.exports = { getUserWorkout, getUserWorkouts, addUserWorkout };

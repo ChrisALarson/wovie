@@ -3,14 +3,14 @@ import React from 'react';
 
 const App = () => {
 
-  const uploadWorkout = (e) => {
+  const uploadUserWorkout = (e) => {
     e.preventDefault();
     const form = e.target;
 
     const data = new FormData();
     data.append('workoutFile', form['fit-file'].files[0]);
 
-    fetch('/workout', {
+    fetch('/users/1/workouts', {
       method: 'POST',
       body: data,
     })
@@ -22,7 +22,7 @@ const App = () => {
 
   return (
     <div>
-      <form onSubmit={uploadWorkout}>
+      <form onSubmit={uploadUserWorkout}>
         <input type="file" name="fit-file"></input>
         <button>Upload workout</button>
       </form>

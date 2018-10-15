@@ -1,16 +1,34 @@
-const fs = require('fs');
 const express = require('express');
-const fileUplaod = require('express-fileupload');
+const fileUpload = require('express-fileupload');
 const EasyFit = require('easy-fit').default;
-
 const db = require('./db/db');
 
 const app = express();
 app.use(express.json());
-app.use(fileUplaod());
+app.use(fileUpload());
 app.use(express.static('public'));
 
-app.post('/workout', (req, res) => {
+// get user workout
+app.get('/users/:userId/workouts/:workoutId', (req, res) => {
+  const { userId, workoutId } = req.params;
+  db.getUserWorkout(userId, workoutId, (err, data) => {
+    if (err) return console.log(err);
+    res.send(data);
+  });
+});
+
+// get user workouts
+app.get('/users/:userId/workouts', (req, res) => {
+  const { userId } = req.params;
+  db.getWorkouts(userId, (err, data) => {
+    if (err) return console.log(err);
+    res.send(data);
+  });
+});
+
+// add user workout
+app.post('/users/:userId/workouts', (req, res) => {
+  const { userId } = req.params;
   const fileData = req.files.workoutFile.data;
   const easyFit = new EasyFit({
     force: true,
@@ -25,7 +43,7 @@ app.post('/workout', (req, res) => {
       res.status(500).send('Unable to parse workout. Check file type and try again.');
       console.log(error);
     } else {
-      db.addWorkout(1, workout, (err, res) => {
+      db.addWorkout(userId, workout, (err, res) => {
         console.log(res);
       });
       let sessions = workout.activity.sessions;
