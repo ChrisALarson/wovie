@@ -1,6 +1,7 @@
 import React from 'react';
-import WorkoutEntry from './WorkoutEntry';
-import WorkoutChart from './WorkoutChart';
+import WorkoutUpload from './WorkoutUpload';
+import WorkoutList from './WorkoutList';
+import WorkoutChartList from './WorkoutChartList';
 
 class App extends React.Component {
   constructor(props) {
@@ -12,11 +13,18 @@ class App extends React.Component {
       activeWorkout: null,
     };
     this.uploadWorkout = this.uploadWorkout.bind(this);
+    this.goHome = this.goHome.bind(this);
   }
 
   componentDidMount() {
     this.getUser(this.state.userId);
     this.getWorkout(this.state.userId, '5bc500c12691700df317debd');
+  }
+
+  goHome() {
+    this.setState({
+      activeWorkout: null,
+    });
   }
 
   getUser(userId) {
@@ -76,16 +84,13 @@ class App extends React.Component {
   render() {
     return (
       <div>
-        <form onSubmit={this.uploadWorkout}>
-          <input type="file" name="fit-file"></input>
-          <input type="text" name="wo-label" placeholder="Workout name"></input>
-          <button>Upload workout</button>
-        </form>
-        <div>
-          <h2>Recent workouts:</h2>
-          { this.renderRecentWorkouts() }
-        </div>
-        { this.renderWorkoutChart() }
+        <WorkoutUpload uploadWorkout={this.uploadWorkout} />
+        <button onClick={this.goHome}>HOME</button>
+        {
+          this.state.activeWorkout ? 
+            <WorkoutChartList workout={this.state.activeWorkout} /> :
+            <WorkoutList workouts={this.state.workouts} />
+        }
       </div>
     );  
   }
