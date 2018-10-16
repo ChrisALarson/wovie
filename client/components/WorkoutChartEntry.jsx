@@ -26,9 +26,9 @@ const WorkoutChart = (props) => {
     
     const movingAverage = (data) => {
       let movingAverages = [];
-      for (let i = 0; i < data.length - 5; i += 5) {
-        let newX = (data[i].x + data[i+1].x + data[i+2].x + data[i+3].x + data[i+4].x) / 5.0;
-        let newY = (data[i].y + data[i+1].y + data[i+2].y + data[i+3].y + data[i+4].y) / 5.0;
+      for (let i = 1; i < data.length - 4; i += 4) {
+        let newX = (data[i].x + data[i+1].x + data[i+2].x + data[i+3].x) / 4.0;
+        let newY = (data[i].y + data[i+1].y + data[i+2].y + data[i+3].y) / 4.0;
         movingAverages.push({ x: newX, y: newY });
       }
       return movingAverages;
@@ -36,8 +36,8 @@ const WorkoutChart = (props) => {
 
     const cleansedSpeed = movingAverage(simplify(rawSpeed, 1));
     const cleansedHR = movingAverage(simplify(rawHR, 1));
-    const cleansedCadence = movingAverage(simplify(rawCadence, 5));
-    const cleansedPower = movingAverage(simplify(rawPower, 5));
+    const cleansedCadence = movingAverage(simplify(rawCadence, 4));
+    const cleansedPower = movingAverage(simplify(rawPower, 4));
 
     return {
       Speed: cleansedSpeed,
@@ -134,7 +134,7 @@ const WorkoutChart = (props) => {
       <Line 
         data={chartData} 
         width={300}
-        height={50}
+        height={100}
         options={chartOpts}
       />
     </div>
