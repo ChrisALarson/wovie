@@ -13,12 +13,12 @@ class App extends React.Component {
       activeWorkout: null,
     };
     this.uploadWorkout = this.uploadWorkout.bind(this);
+    this.getWorkout = this.getWorkout.bind(this);
     this.goHome = this.goHome.bind(this);
   }
 
   componentDidMount() {
     this.getUser(this.state.userId);
-    this.getWorkout(this.state.userId, '5bc500c12691700df317debd');
   }
 
   goHome() {
@@ -39,8 +39,8 @@ class App extends React.Component {
       .catch(e => console.log(e));
   }
 
-  getWorkout(userId, workoutId) {
-    fetch(`/users/${userId}/workouts/${workoutId}`)
+  getWorkout(workoutId) {
+    fetch(`/users/${this.state.userId}/workouts/${workoutId}`)
       .then(res => res.json())
       .then(data => {
         this.setState({
@@ -89,7 +89,7 @@ class App extends React.Component {
         {
           this.state.activeWorkout ? 
             <WorkoutChartList workout={this.state.activeWorkout} /> :
-            <WorkoutList workouts={this.state.workouts} />
+            <WorkoutList workouts={this.state.workouts} getWorkout={this.getWorkout} />
         }
       </div>
     );  

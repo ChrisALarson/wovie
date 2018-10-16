@@ -1,11 +1,16 @@
 import React from 'react';
+import moment from 'moment';
 
 const WorkoutEntry = (props) => {
-  const { id, timestamp, label } = props;
-  console.log(id);
+  const { workout, getWorkout } = props;
+  const { _id, timestamp, label } = workout;
+  const formatted = moment(timestamp).format('LLLL'); // Tuesday, October 16, 2018 10:22 AM
+  const handleClick = () => {
+    getWorkout(_id);
+  };
   return (
-    <div>
-      <h3>{timestamp}: {label}</h3>
+    <div onClick={handleClick}>
+      <h3>{formatted}: {label}</h3>
     </div>
   );
 };
