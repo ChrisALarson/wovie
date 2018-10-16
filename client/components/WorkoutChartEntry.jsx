@@ -25,7 +25,8 @@ const WorkoutChart = (props) => {
     });
     
     const movingAverage = (data) => {
-      let movingAverages = [];
+      if (data.length < 15) return data;
+      const movingAverages = [];
       for (let i = 1; i < data.length - 4; i += 4) {
         let newX = (data[i].x + data[i+1].x + data[i+2].x + data[i+3].x) / 4.0;
         let newY = (data[i].y + data[i+1].y + data[i+2].y + data[i+3].y) / 4.0;
@@ -36,8 +37,8 @@ const WorkoutChart = (props) => {
 
     const cleansedSpeed = movingAverage(simplify(rawSpeed, 1));
     const cleansedHR = movingAverage(simplify(rawHR, 1));
-    const cleansedCadence = movingAverage(simplify(rawCadence, 4));
-    const cleansedPower = movingAverage(simplify(rawPower, 4));
+    const cleansedCadence = movingAverage(simplify(rawCadence, 1));
+    const cleansedPower = movingAverage(simplify(rawPower, 1));
 
     return {
       Speed: cleansedSpeed,
@@ -55,9 +56,9 @@ const WorkoutChart = (props) => {
       'Cadence': '#9c27b0',
     };
     const positionMap = {
-      'Heartrate': 'left',
       'Speed': 'left',
-      'Cadence': 'left',
+      'Heartrate': 'right',
+      'Cadence': 'right',
       'Power': 'right',
     };
     const color = colorMap[metric];
@@ -96,7 +97,7 @@ const WorkoutChart = (props) => {
   const metrics = Object.keys(cleansed);
   metrics.forEach(metric => {
     const data = cleansed[metric];
-    if (data.length > 0) chartData.datasets.push(generateDataset(metric, data));
+    if (data.length > 1) chartData.datasets.push(generateDataset(metric, data));
   });
 
   const chartOpts = {
@@ -133,8 +134,8 @@ const WorkoutChart = (props) => {
       <h2>{sport}</h2>
       <Line 
         data={chartData} 
-        width={300}
-        height={100}
+        width={250}
+        height={75}
         options={chartOpts}
       />
     </div>

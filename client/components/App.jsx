@@ -56,29 +56,13 @@ class App extends React.Component {
     const data = new FormData();
     data.append('workoutFile', form['fit-file'].files[0]);
     data.append('workoutName', form['wo-label'].value);
-    fetch('/users/1/workouts', {
+    fetch(`/users/${this.state.userId}/workouts`, {
       method: 'POST',
       body: data,
     })
     .then(res => this.getUser(this.state.userId))
     .catch(err => console.log(err));
     form.reset();
-  }
-
-  renderRecentWorkouts() {
-    return (
-      <div>
-        { this.state.workouts.map(workout => <WorkoutEntry key= {workout._id} id={workout._id} label={workout.label} timestamp={workout.timestamp} />) }
-      </div>
-    );
-  }
-
-  renderWorkoutChart() {
-    if (this.state.activeWorkout !== null) {
-      return <WorkoutChart workout={this.state.activeWorkout}/>;
-    } else {
-      return <div>No active workout</div>;
-    }
   }
 
   render() {
