@@ -10,6 +10,7 @@ const recordSchema = new Schema({
   cadence: Number,
   temperature: Number,
   heart_rate: Number,
+  altitude: Number,
 }, {
   _id: false,
   id: false,
@@ -24,6 +25,12 @@ const lapSchema = new Schema({
 
 const sessionSchema = new Schema({
   sport: String,
+  avg_speed: Number,
+  avg_cadence: Number,
+  avg_power: Number,
+  avg_heart_rate: Number,
+  total_calories: Number,
+  total_distance: Number,
   laps: [ lapSchema ],
 }, {
   _id: false,

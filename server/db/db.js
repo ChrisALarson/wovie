@@ -24,8 +24,6 @@ const getUserWorkouts = (userId, callback) => {
   });
 };
 
-// add date, type, and name? to user workout metadata
-
 const addUserWorkout = (userId, workoutData, workoutName, callback) => {
   User
     .findOne({ user_id: userId})
